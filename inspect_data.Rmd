@@ -25,6 +25,7 @@ First, install necessary packages by uncommenting the lines below. Import dplyr 
 #install.packages("tidyr")
 #install.packages("igraph")
 #install.packages("tidyverse")
+#install.packages("Rfast")
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -48,9 +49,36 @@ summary(df)
 Filter through column 1 to 25 and find rows with every variable larger than 200. The results are saved in a table called *filtered*. There are 201 genes that meets this criteria
 
 ```{r}
+
 filtered <- df %>%
-  filter_at(1:24, all_vars(. > 200)) 
-head(filtered)
+  filter_at(1:24, all_vars(. > 100)) 
+
+
+
+filtered_large <- df %>%
+  filter_at(1:24, all_vars(. > 300)) 
+head(filtered_large)
+
+passed_index = list()
+i = 1
+
+
+for (row in 1:nrow(filtered_large)){
+  # print(max(filtered_large[row,]))
+  # print(min(filtered_large[row,]))
+  max_diff = max(filtered_large[row,]) - min(filtered_large[row,])
+  print(max_diff)  if(max_diff < 300){
+    print('Fits')
+    passed_index[[i]] = row
+    i = i + 1
+    
+  }
+}
+
+filtered_large = transform(filtered_large, SD=apply(filtered_large,1, sd, na.rm = TRUE))
+
+sorted_large <- filtered_large[order(SD),]
+
 ```
 Create Graph and tree objects. Note that we're plotting the genes that met the criteria.
 
