@@ -67,7 +67,9 @@ for (row in 1:nrow(filtered_large)){
   # print(max(filtered_large[row,]))
   # print(min(filtered_large[row,]))
   max_diff = max(filtered_large[row,]) - min(filtered_large[row,])
-  print(max_diff)  if(max_diff < 300){
+  print(max_diff)  
+  
+  if (max_diff < 300){
     print('Fits')
     passed_index[[i]] = row
     i = i + 1
@@ -76,8 +78,8 @@ for (row in 1:nrow(filtered_large)){
 }
 
 filtered_large = transform(filtered_large, SD=apply(filtered_large,1, sd, na.rm = TRUE))
-
-sorted_large <- filtered_large[order(SD),]
+sorted_large <- filtered_large[order(filtered_large$SD),]
+head(sorted_large)
 
 ```
 Create Graph and tree objects. Note that we're plotting the genes that met the criteria.
